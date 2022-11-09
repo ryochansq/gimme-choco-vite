@@ -12,7 +12,7 @@ type Context = {
 export const Context = createContext({} as Context);
 
 export const ContextProvider = ({ children }: { children: ReactNode }) => {
-  const [view, setView] = useState<View>("Top");
+  const [view, setView] = useState<View>("Game");
   const [score, setScore] = useState(0);
 
   return (

@@ -11,7 +11,14 @@ export default function App() {
   const { view } = useContext(Context);
 
   return (
-    <Flex direction="column" align="center" bg="cream" minH="100vh">
+    <Flex
+      direction="column"
+      align="center"
+      bg="cream"
+      minH="100vh"
+      userSelect="none"
+      style={{ touchAction: "none" }}
+    >
       <Header />
       <Box maxW="md" width="100%">
         <Collapse in={view === "Top"} animateOpacity>
