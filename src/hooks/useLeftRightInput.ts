@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 
-export type Input = "left" | "right" | "center";
-
 const isLeft = (x: number) => x <= document.body.clientWidth / 2;
 
 export const useLeftRightInput = (): { input: Input } => {
