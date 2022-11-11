@@ -1,22 +1,19 @@
 import { Flex, Text } from "@chakra-ui/react";
-import { useContext } from "react";
-import { useLeftRifhtInput } from "../../hooks/useLeftRightInput";
+import { useContext, useRef } from "react";
 import { Context } from "../../store";
 import { useGame } from "./hooks/useGame";
 
 export const Game = () => {
-  const { score, setScore, setView } = useContext(Context);
-  const { input } = useLeftRifhtInput();
-  const diff = useGame();
+  const { score } = useContext(Context);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useGame(canvasRef);
 
   return (
     <>
-      <div
-        style={{ backgroundColor: "green", width: "444px", height: "532px" }}
-      >
-        game
+      <div style={{ width: "100%", aspectRatio: "10/12" }}>
+        <canvas ref={canvasRef} width="100%" height="100%" />
+        {/* TODO: canvasのwidthとheightを指定したい。pxじゃないと指定できないのでどうしよう */}
       </div>
-      <span>{diff}</span>
       <Flex align="end" justify="center" color="choco.500" p="8px">
         <Text fontSize="xl" as="b" lineHeight="30px">
           受け止めた数：

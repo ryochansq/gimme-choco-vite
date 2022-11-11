@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 
-export type Input = "left" | "right" | "";
+export type Input = "left" | "right" | "center";
 
 const isLeft = (x: number) => x <= document.body.clientWidth / 2;
 
-export const useLeftRifhtInput = (): { input: Input } => {
+export const useLeftRightInput = (): { input: Input } => {
   const [left, setLeft] = useState(false);
   const [right, setRight] = useState(false);
 
-  const input = left ? "left" : right ? "right" : "";
+  const input = left ? "left" : right ? "right" : "center";
 
   useEffect(() => {
     document.addEventListener("keydown", handleKeyEvents, false);
