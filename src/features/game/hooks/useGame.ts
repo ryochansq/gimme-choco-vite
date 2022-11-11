@@ -3,11 +3,19 @@ import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { Input, useLeftRightInput } from "../../../hooks/useLeftRightInput";
 import { Context } from "../../../store";
 
-const HEIGHT_RATIO = 1.2;
+type Size = {
+  width: number;
+  height: number;
+};
+
 const MOA_SIZE = 35;
 const CHOCO_SIZE = 15;
 const moa = new Image();
-moa.src = "/moa.png";
+moa.src = "/moa/moa.png";
+const moaLeft = new Image();
+moaLeft.src = "/moa/moaLeft.png";
+const moaRight = new Image();
+moaRight.src = "/moa/moaRight.png";
 const MOA_HEIGHT_RATIO = moa.height / moa.width;
 
 const getMoaDx = (width: number, input: Input) => {
@@ -19,14 +27,32 @@ const getMoaDx = (width: number, input: Input) => {
   return (width / 100) * (lane[input] - MOA_SIZE / 2);
 };
 
+const getMoaImage = (input: Input) => {
+  const image = {
+    left: moaLeft,
+    center: moa,
+    right: moaRight,
+  };
+  return image[input];
+};
+
+const drawImage = (
+  image: CanvasImageSource,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  canvasSize: Size
+) => {};
+
 const draw = (
   ctx: CanvasRenderingContext2D | undefined,
-  width: number,
+  { width, height }: Size,
   input: Input
 ) => {
   if (!ctx) return;
-  ctx.clearRect(0, 0, width, width * HEIGHT_RATIO);
-  const image = moa;
+  ctx.clearRect(0, 0, width, height);
+  const image = getMoaImage(input);
   const dx = getMoaDx(width, input);
   const dy = (width / 100) * 65;
   const dw = (width / 100) * MOA_SIZE;
@@ -37,21 +63,21 @@ const draw = (
 export const useGame = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
   const { setScore, setView } = useContext(Context);
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>();
-  const [width, setWidth] = useState(0);
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
   const { input } = useLeftRightInput();
 
-  useAnimationFrame(() => draw(ctx, width, input));
+  useAnimationFrame(() => draw(ctx, canvasSize, input));
 
   // init
   useLayoutEffect(() => {
-    // canvasのwidthとheightを、100%で指定したいのでここで設定
+    // canvasのwidthとheightを、Retina対応のため2倍で設定
     const canvas = canvasRef.current!;
     const parent = canvas.parentNode;
-    canvas.width = (parent as HTMLBaseElement).clientWidth;
-    canvas.height = canvas.width * HEIGHT_RATIO;
+    canvas.width = (parent as HTMLBaseElement).clientWidth * 2;
+    canvas.height = (parent as HTMLBaseElement).clientHeight * 2;
     const context = canvas.getContext("2d");
     setCtx(context!);
-    setWidth(canvasRef.current!.clientWidth);
+    setCanvasSize({ width: canvas.width, height: canvas.height });
   }, []);
 };

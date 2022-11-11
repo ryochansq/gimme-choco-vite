@@ -11,8 +11,7 @@ export const Game = () => {
   return (
     <>
       <div style={{ width: "100%", aspectRatio: "10/12" }}>
-        <canvas ref={canvasRef} width="100%" height="100%" />
-        {/* TODO: canvasのwidthとheightを指定したい。pxじゃないと指定できないのでどうしよう */}
+        <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
       </div>
       <Flex align="end" justify="center" color="choco.500" p="8px">
         <Text fontSize="xl" as="b" lineHeight="30px">
