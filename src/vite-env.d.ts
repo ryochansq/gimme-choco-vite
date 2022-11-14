@@ -9,19 +9,12 @@ type Size = {
 
 type Phase = "START" | "GAME" | "END";
 
+type DropType = "choco0" | "choco1" | "choco2" | "hone";
+
 type Drop = {
-  type: "choco0" | "choco1" | "choco2" | "hone";
+  type: DropType;
   lane: Input;
   ms: number;
-};
-
-type MOVING = {
-  type: "MOVING";
-  speed: number;
-};
-
-type NORMAL = {
-  type: "NORMAL";
 };
 
 type Moa = {
@@ -35,7 +28,6 @@ type Moa = {
 
 type GameParameters = {
   phase: Phase;
-  ms: number;
   moa: Moa;
   drops: Drop[];
   score: number;

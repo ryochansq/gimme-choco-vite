@@ -7,9 +7,9 @@ export const drawImage = (
   h: number,
   { width }: Size
 ) => {
-  const dx = (width / 100) * x;
-  const dy = (width / 100) * y;
-  const dw = (width / 100) * w;
-  const dh = (width / 100) * h;
+  const dx = Math.round((width / 100) * x);
+  const dy = Math.round((width / 100) * y);
+  const dw = Math.round((width / 100) * w);
+  const dh = Math.round((width / 100) * h);
   ctx.drawImage(image, dx, dy, dw, dh);
 };
