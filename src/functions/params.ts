@@ -1,11 +1,13 @@
 const MOA_LANE_INTERVAL = 21; // 単位：pt
-const MOA_MOVING_TIME = 60; // 単位：ms
-const MOA_SPEED = (MOA_LANE_INTERVAL * 1.5) / MOA_MOVING_TIME; // 単位：pt/ms
+const MOA_MOVING_TIME = 40; // 単位：ms
+const MOA_SPEED = MOA_LANE_INTERVAL / MOA_MOVING_TIME; // 単位：pt/ms
 const MOA_LANE = {
   left: 50 - MOA_LANE_INTERVAL,
   center: 50,
   right: 50 + MOA_LANE_INTERVAL,
 };
+const CATCHING_TIME = 200; //単位：ms
+const DAMAGED_TIME = 600; // 単位：ms
 
 const DROP_LANE_INTERVAL = 30;
 export const DROP_LANE = {
@@ -15,8 +17,31 @@ export const DROP_LANE = {
 };
 export const GRAVITY_CONSTANT = 0.07 / 900; // 単位：pt/ms^2
 
-const getNewMoa = (input: Input, moa: Moa, ms: number) => {
+export const CATCHABLE_RANGE = {
+  start: 98,
+  end: 103,
+};
+
+const getNewMoa = (
+  input: Input,
+  moa: Moa,
+  ms: number,
+  catchingDropType?: DropType
+): Moa => {
   const newMoa = { ...moa };
+  if (catchingDropType === "hone")
+    return { ...moa, x: MOA_LANE.center, condition: { type: "DAMAGED", ms } };
+  if (newMoa.condition) {
+    newMoa.condition.ms += ms;
+    if (newMoa.condition.type === "DAMAGED") {
+      if (newMoa.condition.ms > DAMAGED_TIME) delete newMoa.condition;
+      else return newMoa;
+    }
+    if (newMoa.condition?.type === "CATCHING") {
+      if (newMoa.condition.ms > CATCHING_TIME) delete newMoa.condition;
+    }
+  }
+  if (catchingDropType) newMoa.condition = { type: "CATCHING", ms };
   const destination = MOA_LANE[input];
   const d = MOA_SPEED * ms;
   if (destination > newMoa.x) {
@@ -47,23 +72,27 @@ const getCatchingDrop = (input: Input, params: GameParameters) => {
   for (let i = 0; i < drops.length; i++) {
     const drop = drops[i];
     if (drop.lane !== input) continue;
-    if (96 <= drop.y && drop.y <= 101) return { ...drop, index: i };
-    // if (86 <= drop.y && drop.y <= 92) return { ...drop, index: i };
+    if (CATCHABLE_RANGE.start <= drop.y && drop.y <= CATCHABLE_RANGE.end)
+      return { ...drop, index: i };
   }
   return undefined;
 };
+
+const isChoco = (dropType: DropType) => dropType !== "hone";
 
 export const getUpdatedParams = (
   ms: number,
   input: Input,
   params: GameParameters
 ): GameParameters => {
-  const newDrops = getNewDrops(params.drops, ms);
+  const drops = getNewDrops(params.drops, ms);
   const catchingDrop = getCatchingDrop(input, params);
-  const newNewDrops = catchingDrop
-    ? newDrops.filter((_, index) => index !== catchingDrop.index)
-    : newDrops;
-  const newMoa = getNewMoa(input, params.moa, ms);
+  const newDrops = catchingDrop
+    ? drops.filter((_, index) => index !== catchingDrop.index)
+    : drops;
+  const moa = getNewMoa(input, params.moa, ms, catchingDrop?.type);
+  const score =
+    params.score + (catchingDrop && isChoco(catchingDrop.type) ? 1 : 0);
 
-  return { ...params, moa: newMoa, drops: newNewDrops };
+  return { ...params, moa, score, drops: newDrops };
 };

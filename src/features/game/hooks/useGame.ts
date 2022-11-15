@@ -25,6 +25,7 @@ export const useGame = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
     const updatedParams = getUpdatedParams(ms, input, params);
     draw(ctx, canvasSize, input, ms, updatedParams);
     setParams(updatedParams);
+    setScore(updatedParams.score);
     // TODO: scoreの更新とか？ゲーム開始・終了処理とか？
   };
   useAnimationFrame(callback);

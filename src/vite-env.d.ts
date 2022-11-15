@@ -19,13 +19,17 @@ type Drop = {
   y: number;
 };
 
+type ConditionType = "CATCHING" | "DAMAGED";
+
+type Condition = {
+  type: ConditionType;
+  ms: number;
+};
+
 type Moa = {
   x: number;
   y: number;
-  condition?: {
-    type: "CATCHING" | "DAMAGED";
-    ms: number;
-  };
+  condition?: Condition;
 };
 
 type GameParameters = {

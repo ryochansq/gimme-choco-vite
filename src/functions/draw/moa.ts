@@ -7,15 +7,29 @@ const moaLeftImage = new Image();
 moaLeftImage.src = "/moa/moaLeft.png";
 const moaRightImage = new Image();
 moaRightImage.src = "/moa/moaRight.png";
+const moaDamagedImage = new Image();
+moaDamagedImage.src = "/moa/moaDamaged.png";
 const MOA_HEIGHT_RATIO = moaImage.height / moaImage.width;
+const AMPLITUDE = {
+  DAMAGED: 0.015,
+  CATCHING: 0.055,
+};
 
-const getMoaImage = (input: Input) => {
+const getMoaImage = (input: Input, conditionType?: ConditionType) => {
   const image = {
     left: moaLeftImage,
     center: moaImage,
     right: moaRightImage,
+    damaged: moaDamagedImage,
   };
+  if (conditionType === "DAMAGED") return image.damaged;
   return image[input];
+};
+
+const getMoaScale = (condition?: Condition) => {
+  if (!condition) return 1;
+  const a = AMPLITUDE[condition.type];
+  return 1 - a - a * Math.sin((condition.ms / 100 - 1 / 2) * Math.PI);
 };
 
 export const drawMoa = (
@@ -24,10 +38,12 @@ export const drawMoa = (
   canvasSize: Size,
   moa: Moa
 ) => {
-  const image = getMoaImage(input);
-  const x = moa.x - MOA_SIZE / 2;
-  const y = moa.y - (MOA_SIZE * MOA_HEIGHT_RATIO) / 2;
+  const image = getMoaImage(input, moa.condition?.type);
+  const yScale = getMoaScale(moa.condition);
   const w = MOA_SIZE;
-  const h = MOA_SIZE * MOA_HEIGHT_RATIO;
+  const h = MOA_SIZE * MOA_HEIGHT_RATIO * yScale;
+  const x = moa.x - MOA_SIZE / 2;
+  const y =
+    moa.y - (MOA_SIZE * MOA_HEIGHT_RATIO) / 2 + (h / yScale) * (1 - yScale);
   drawImage(ctx, image, x, y, w, h, canvasSize);
 };
