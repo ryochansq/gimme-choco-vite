@@ -15,6 +15,8 @@ type Drop = {
   type: DropType;
   lane: Input;
   ms: number;
+  x: number;
+  y: number;
 };
 
 type Moa = {

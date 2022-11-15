@@ -32,15 +32,38 @@ const getNewMoa = (input: Input, moa: Moa, ms: number) => {
 };
 
 const getNewDrops = (drops: Drop[], ms: number) =>
-  drops.map((drop) => ({ ...drop, ms: drop.ms + ms }));
+  drops.map((drop) => {
+    const newMs = drop.ms + ms;
+    if (newMs < 0) return { ...drop, ms: newMs };
+
+    const x = DROP_LANE[drop.lane];
+    const y = GRAVITY_CONSTANT * newMs * newMs;
+    return { ...drop, ms: newMs, x, y };
+  });
+
+const getCatchingDrop = (input: Input, params: GameParameters) => {
+  if (params.moa.condition?.type === "DAMAGED") return undefined;
+  const { drops } = params;
+  for (let i = 0; i < drops.length; i++) {
+    const drop = drops[i];
+    if (drop.lane !== input) continue;
+    if (96 <= drop.y && drop.y <= 101) return { ...drop, index: i };
+    // if (86 <= drop.y && drop.y <= 92) return { ...drop, index: i };
+  }
+  return undefined;
+};
 
 export const getUpdatedParams = (
   ms: number,
   input: Input,
   params: GameParameters
 ): GameParameters => {
-  const newMoa = getNewMoa(input, params.moa, ms);
   const newDrops = getNewDrops(params.drops, ms);
+  const catchingDrop = getCatchingDrop(input, params);
+  const newNewDrops = catchingDrop
+    ? newDrops.filter((_, index) => index !== catchingDrop.index)
+    : newDrops;
+  const newMoa = getNewMoa(input, params.moa, ms);
 
-  return { ...params, moa: newMoa, drops: newDrops };
+  return { ...params, moa: newMoa, drops: newNewDrops };
 };

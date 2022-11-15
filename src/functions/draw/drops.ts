@@ -1,4 +1,3 @@
-import { DROP_LANE, GRAVITY_CONSTANT } from "../params";
 import { drawImage } from "./utils";
 
 const DROP_SIZE = 15;
@@ -31,8 +30,8 @@ export const drawDrops = (
   drops.forEach((drop: Drop) => {
     if (drop.ms < 0) return;
     const image = getDropImage(drop.type);
-    const x = DROP_LANE[drop.lane] - DROP_SIZE / 2;
-    const y = GRAVITY_CONSTANT * drop.ms * drop.ms - DROP_SIZE;
+    const x = drop.x - DROP_SIZE / 2;
+    const y = drop.y - DROP_SIZE;
     const w = DROP_SIZE;
     const h = DROP_SIZE * DROP_HEIGHT_RATIO;
     drawImage(ctx, image, x, y, w, h, canvasSize);
