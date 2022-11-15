@@ -57,14 +57,16 @@ const getNewMoa = (
 };
 
 const getNewDrops = (drops: Drop[], ms: number) =>
-  drops.map((drop) => {
-    const newMs = drop.ms + ms;
-    if (newMs < 0) return { ...drop, ms: newMs };
+  drops
+    .filter((drop) => drop.y < 150)
+    .map((drop) => {
+      const newMs = drop.ms + ms;
+      if (newMs < 0) return { ...drop, ms: newMs };
 
-    const x = DROP_LANE[drop.lane];
-    const y = GRAVITY_CONSTANT * newMs * newMs;
-    return { ...drop, ms: newMs, x, y };
-  });
+      const x = DROP_LANE[drop.lane];
+      const y = GRAVITY_CONSTANT * newMs * newMs;
+      return { ...drop, ms: newMs, x, y };
+    });
 
 const getCatchingDrop = (input: Input, params: GameParameters) => {
   if (params.moa.condition?.type === "DAMAGED") return undefined;
@@ -78,7 +80,7 @@ const getCatchingDrop = (input: Input, params: GameParameters) => {
   return undefined;
 };
 
-const isChoco = (dropType: DropType) => dropType !== "hone";
+const isChoco = (dropType?: DropType) => dropType && dropType !== "hone";
 
 export const getUpdatedParams = (
   ms: number,
@@ -91,8 +93,7 @@ export const getUpdatedParams = (
     ? drops.filter((_, index) => index !== catchingDrop.index)
     : drops;
   const moa = getNewMoa(input, params.moa, ms, catchingDrop?.type);
-  const score =
-    params.score + (catchingDrop && isChoco(catchingDrop.type) ? 1 : 0);
+  const score = params.score + (isChoco(catchingDrop?.type) ? 1 : 0);
 
   return { ...params, moa, score, drops: newDrops };
 };
