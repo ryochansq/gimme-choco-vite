@@ -11,7 +11,7 @@ const moaDamagedImage = new Image();
 moaDamagedImage.src = "/moa/moaDamaged.png";
 const MOA_HEIGHT_RATIO = moaImage.height / moaImage.width;
 const AMPLITUDE = {
-  DAMAGED: 0.015,
+  DAMAGED: 0.03,
   CATCHING: 0.055,
 };
 

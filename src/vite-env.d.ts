@@ -12,6 +12,7 @@ type Phase = "START" | "GAME" | "END";
 type DropType = "choco0" | "choco1" | "choco2" | "hone";
 
 type Drop = {
+  id: string;
   type: DropType;
   lane: Input;
   ms: number;

@@ -1,5 +1,5 @@
 const MOA_LANE_INTERVAL = 21; // 単位：pt
-const MOA_MOVING_TIME = 40; // 単位：ms
+const MOA_MOVING_TIME = 30; // 単位：ms
 const MOA_SPEED = MOA_LANE_INTERVAL / MOA_MOVING_TIME; // 単位：pt/ms
 const MOA_LANE = {
   left: 50 - MOA_LANE_INTERVAL,
@@ -15,11 +15,11 @@ export const DROP_LANE = {
   center: 50,
   right: 50 + DROP_LANE_INTERVAL,
 };
-export const GRAVITY_CONSTANT = 0.07 / 900; // 単位：pt/ms^2
+export const GRAVITY_CONSTANT = 0.06 / 900; // 単位：pt/ms^2
 
 export const CATCHABLE_RANGE = {
-  start: 98,
-  end: 103,
+  start: 99,
+  end: 104,
 };
 
 const getNewMoa = (
@@ -69,18 +69,20 @@ const getNewDrops = (drops: Drop[], ms: number) =>
     });
 
 const getCatchingDrop = (input: Input, params: GameParameters) => {
-  if (params.moa.condition?.type === "DAMAGED") return undefined;
+  if (params.moa.condition?.type === "DAMAGED") return;
   const { drops } = params;
-  for (let i = 0; i < drops.length; i++) {
-    const drop = drops[i];
-    if (drop.lane !== input) continue;
-    if (CATCHABLE_RANGE.start <= drop.y && drop.y <= CATCHABLE_RANGE.end)
-      return { ...drop, index: i };
-  }
-  return undefined;
+  return drops.find(
+    (drop) =>
+      drop.lane === input &&
+      CATCHABLE_RANGE.start <= drop.y &&
+      drop.y <= CATCHABLE_RANGE.end
+  );
 };
 
-const isChoco = (dropType?: DropType) => dropType && dropType !== "hone";
+const getNewScore = (score: number, dropType?: DropType) => {
+  if (!dropType) return score;
+  return dropType !== "hone" ? score + 1 : Math.max(score - 3, 0);
+};
 
 export const getUpdatedParams = (
   ms: number,
@@ -90,10 +92,10 @@ export const getUpdatedParams = (
   const drops = getNewDrops(params.drops, ms);
   const catchingDrop = getCatchingDrop(input, params);
   const newDrops = catchingDrop
-    ? drops.filter((_, index) => index !== catchingDrop.index)
+    ? drops.filter((drop) => drop.id !== catchingDrop.id)
     : drops;
   const moa = getNewMoa(input, params.moa, ms, catchingDrop?.type);
-  const score = params.score + (isChoco(catchingDrop?.type) ? 1 : 0);
+  const score = getNewScore(params.score, catchingDrop?.type);
 
   return { ...params, moa, score, drops: newDrops };
 };
