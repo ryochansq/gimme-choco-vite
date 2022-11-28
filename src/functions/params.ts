@@ -1,3 +1,7 @@
+const GIVEME_TIME = 1500; //単位：ms
+const CHOCOLATE_TIME = 1800; //単位：ms
+const FINISH_TIME = 2200; //単位：ms
+
 const MOA_LANE_INTERVAL = 21; // 単位：pt
 const MOA_MOVING_TIME = 30; // 単位：ms
 const MOA_SPEED = MOA_LANE_INTERVAL / MOA_MOVING_TIME; // 単位：pt/ms
@@ -56,17 +60,19 @@ const getNewMoa = (
   return newMoa;
 };
 
-const getNewDrops = (drops: Drop[], ms: number) =>
-  drops
-    .filter((drop) => drop.y < 150)
-    .map((drop) => {
-      const newMs = drop.ms + ms;
-      if (newMs < 0) return { ...drop, ms: newMs };
+const getNewDrops = (phase: Phase, drops: Drop[], ms: number) =>
+  phase === "GAME"
+    ? drops
+        .filter((drop) => drop.y < 150)
+        .map((drop) => {
+          const newMs = drop.ms + ms;
+          if (newMs < 0) return { ...drop, ms: newMs };
 
-      const x = DROP_LANE[drop.lane];
-      const y = GRAVITY_CONSTANT * newMs * newMs;
-      return { ...drop, ms: newMs, x, y };
-    });
+          const x = DROP_LANE[drop.lane];
+          const y = GRAVITY_CONSTANT * newMs * newMs;
+          return { ...drop, ms: newMs, x, y };
+        })
+    : drops;
 
 const getCatchingDrop = (input: Input, params: GameParameters) => {
   if (params.moa.condition?.type === "DAMAGED") return;
@@ -84,18 +90,35 @@ const getNewScore = (score: number, dropType?: DropType) => {
   return dropType !== "hone" ? score + 1 : Math.max(score - 3, 0);
 };
 
+const getNewPhase = (phase: Phase, drops: Drop[], ms: number): Phase => {
+  switch (phase) {
+    case "GIVEME":
+      return ms < GIVEME_TIME ? "GIVEME" : "CHOCOLATE";
+    case "CHOCOLATE":
+      return ms < CHOCOLATE_TIME ? "CHOCOLATE" : "GAME";
+    case "GAME":
+      return drops.length ? "GAME" : "FINISH";
+    case "FINISH":
+      return ms < FINISH_TIME ? "FINISH" : "END";
+    default:
+      return phase;
+  }
+};
+
 export const getUpdatedParams = (
   ms: number,
   input: Input,
   params: GameParameters
 ): GameParameters => {
-  const drops = getNewDrops(params.drops, ms);
+  const drops = getNewDrops(params.phase, params.drops, ms);
   const catchingDrop = getCatchingDrop(input, params);
   const newDrops = catchingDrop
     ? drops.filter((drop) => drop.id !== catchingDrop.id)
     : drops;
   const moa = getNewMoa(input, params.moa, ms, catchingDrop?.type);
   const score = getNewScore(params.score, catchingDrop?.type);
+  const newPhase = getNewPhase(params.phase, newDrops, params.ms);
+  const newMs = params.phase === newPhase ? params.ms + ms : 0;
 
-  return { ...params, moa, score, drops: newDrops };
+  return { phase: newPhase, ms: newMs, moa, score, drops: newDrops };
 };

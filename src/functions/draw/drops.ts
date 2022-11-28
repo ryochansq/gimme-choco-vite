@@ -24,7 +24,6 @@ const getDropImage = (type: DropType) => {
 export const drawDrops = (
   ctx: CanvasRenderingContext2D,
   canvasSize: Size,
-  ms: number,
   drops: Drop[]
 ) => {
   drops.forEach((drop: Drop) => {

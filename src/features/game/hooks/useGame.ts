@@ -10,7 +10,8 @@ export const useGame = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
   const { setScore, setView } = useContext(Context);
   const { ctx, canvasSize, input } = useCanvas(canvasRef);
   const [params, setParams] = useState<GameParameters>({
-    phase: "START",
+    phase: "GIVEME",
+    ms: 0,
     moa: { x: 50, y: 91 },
     drops: makeDrops(),
     score: 0,
@@ -22,7 +23,7 @@ export const useGame = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
     draw(ctx, canvasSize, input, ms, updatedParams);
     setParams(updatedParams);
     setScore(updatedParams.score);
-    // TODO: ゲーム開始・終了処理とか？
+    if (params.phase === "END") setView("Result");
   };
   useAnimationFrame(callback);
 };

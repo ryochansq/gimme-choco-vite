@@ -7,7 +7,7 @@ type Size = {
   height: number;
 };
 
-type Phase = "START" | "GAME" | "END";
+type Phase = "GIVEME" | "CHOCOLATE" | "GAME" | "FINISH" | "END";
 
 type DropType = "choco0" | "choco1" | "choco2" | "hone";
 
@@ -35,6 +35,7 @@ type Moa = {
 
 type GameParameters = {
   phase: Phase;
+  ms: number;
   moa: Moa;
   drops: Drop[];
   score: number;

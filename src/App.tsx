@@ -21,14 +21,14 @@ export default function App() {
     >
       <Header />
       <Box maxW="md" width="100%">
-        <Collapse in={view === "Top"} animateOpacity>
+        <Collapse in={view === "Top"} animateOpacity unmountOnExit>
           <Top />
           <Footer />
         </Collapse>
-        <Collapse in={view === "Game"} animateOpacity>
+        <Collapse in={view === "Game"} animateOpacity unmountOnExit>
           <Game />
         </Collapse>
-        <Collapse in={view === "Result"} animateOpacity>
+        <Collapse in={view === "Result"} animateOpacity unmountOnExit>
           <Result />
           <Footer />
         </Collapse>
