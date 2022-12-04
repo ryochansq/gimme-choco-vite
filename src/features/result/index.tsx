@@ -5,7 +5,7 @@ import { BaseButton } from "../../components/parts/BaseButton";
 import { Context } from "../../store";
 
 export const Result = () => {
-  const { score, setView } = useContext(Context);
+  const { score, setView, level } = useContext(Context);
   const evaluation = (() => {
     if (score === 100) return "100";
     if (score >= 80) return "80";
@@ -19,8 +19,10 @@ export const Result = () => {
   };
 
   const onClickTweet = () => {
-    // TODO: ツイート機能の実装
-    console.info("tweet");
+    const text = `もあちゃんのギミチョコだいさくせん で\n 満腹度：${score}（${level}） でした！\n\ngimme-choco.ryochansq.vercel.app\n\n#もあちゃんのギミチョコだいさくせん\n#BABYMETAL #さくら学院父兄パソコン部`;
+    const encodedText = encodeURIComponent(text);
+    const intent = `https://twitter.com/intent/tweet?text=${encodedText}`;
+    window.open(intent);
   };
 
   return (
@@ -37,14 +39,14 @@ export const Result = () => {
       <Flex justify="center" gap="16px">
         <BaseButton
           colorScheme="choco"
-          size="sm"
+          size="md"
           onClick={onClickReplay}
           text="もういちど遊ぶ！"
         />
         <BaseButton
           colorScheme="twitter"
           leftIcon={<FaTwitter />}
-          size="sm"
+          size="md"
           onClick={onClickTweet}
           text="Twitterで共有"
         />

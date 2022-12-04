@@ -1,10 +1,10 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Select, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { BaseButton } from "../../components/parts/BaseButton";
-import { Context } from "../../store";
+import { Context, Level } from "../../store";
 
 export const Top = () => {
-  const { setView } = useContext(Context);
+  const { setView, level, setLevel } = useContext(Context);
   const onClickStart = () => {
     setView("Game");
   };
@@ -33,10 +33,26 @@ export const Top = () => {
         </Text>
         ので気をつけてね。
       </Text>
-      <Flex justify="center">
+      <Flex justify="center" align="center">
+        <Text fontSize="sm">難易度：</Text>
+        <Select
+          defaultValue={level}
+          onChange={(e) => setLevel(e.target.value as Level)}
+          size="sm"
+          variant="filled"
+          w="160px"
+        >
+          <option value="あまい">あまい</option>
+          <option value="ふつう">ふつう🔥</option>
+          <option value="からい">からい🔥🔥</option>
+          <option value="ヤバッ！">ヤバッ！🔥🔥🔥</option>
+        </Select>
+      </Flex>
+      <Flex justify="center" mt="2">
         <BaseButton
           colorScheme="choco"
           onClick={onClickStart}
+          size="md"
           text="ゲームスタート！"
         />
       </Flex>
