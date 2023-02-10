@@ -7,14 +7,15 @@ import { useCanvas } from "../../../hooks/useCanvas";
 import { Context } from "../../../store";
 
 export const useGame = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
-  const { setScore, setView } = useContext(Context);
+  const { setScore, setView, level } = useContext(Context);
   const { ctx, canvasSize, input } = useCanvas(canvasRef);
   const [params, setParams] = useState<GameParameters>({
     phase: "GIVEME",
     ms: 0,
     moa: { x: 50, y: 91 },
-    drops: makeDrops(),
+    drops: makeDrops(level),
     score: 0,
+    level,
   });
 
   const callback = (ms: number) => {

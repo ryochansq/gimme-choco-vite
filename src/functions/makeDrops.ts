@@ -1,8 +1,7 @@
 import _ from "lodash";
 
 const INTERVAL = 1000;
-const MIN_GAP = 240;
-const MAX_GAP = 360;
+const GAP = 220;
 const ADDING_SEED = _.random(1);
 
 const PLAN = [
@@ -41,7 +40,8 @@ const getRandomAddingLane = (lane: Input) => {
   return r ? "left" : "center";
 };
 
-const shouldAdd = (index: number) => {
+const shouldAdd = (index: number, level: Level) => {
+  if (level === "あまい" || level === "ふつう") return false;
   if (index < 5) return false;
   if (index < 30) return index % 5 === ADDING_SEED;
   if (index < 70) return index % 3 === ADDING_SEED;
@@ -57,8 +57,21 @@ const getRandomDrop = (isHone?: "hone"): Drop => ({
   y: 0,
 });
 
-export const makeDrops = (): Drop[] => {
-  return PLAN.reduce<Drop[]>((prev, { choco, hone }) => {
+const getGap = (level: Level) => {
+  switch (level) {
+    case "あまい":
+      return _.random(GAP * 2.1, GAP * 2.3);
+    case "ふつう":
+      return _.random(GAP * 1.9, GAP * 2.1);
+    case "からい":
+      return _.random(GAP * 1.1, GAP * 1.5);
+    case "ヤバッ！":
+      return _.random(GAP * 1.0, GAP * 1.2);
+  }
+};
+
+export const makeDrops = (level: Level): Drop[] => {
+  const ret = PLAN.reduce<Drop[]>((prev, { choco, hone }) => {
     if (prev.length === 0) return [{ ...getRandomDrop(), lane: "center" }];
     let lastMs = prev.slice(-1)[0].ms - INTERVAL;
     const chocos = new Array<Drop>(choco)
@@ -68,14 +81,14 @@ export const makeDrops = (): Drop[] => {
       .fill(getRandomDrop("hone"))
       .map(() => getRandomDrop("hone"));
     const drops = _.shuffle([...chocos, ...hones]).map((drop) => {
-      const ms = lastMs - _.random(MIN_GAP, MAX_GAP);
+      const ms = lastMs - getGap(level);
       lastMs = ms;
       return { ...drop, ms };
     });
     return [...prev, ...drops];
   }, []).reduce<Drop[]>((prev, cur, index) => {
     const drops = [...prev, cur];
-    if (shouldAdd(index))
+    if (shouldAdd(index, level))
       drops.push({
         ...cur,
         id: _.uniqueId(),
@@ -84,4 +97,5 @@ export const makeDrops = (): Drop[] => {
       });
     return drops;
   }, []);
+  return level === "あまい" ? ret.filter((drop) => drop.type !== "hone") : ret;
 };

@@ -1,7 +1,7 @@
-import { Box, Flex, Select, Text } from "@chakra-ui/react";
+import { Flex, Select, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { BaseButton } from "../../components/parts/BaseButton";
-import { Context, Level } from "../../store";
+import { Context } from "../../store";
 
 export const Top = () => {
   const { setView, level, setLevel } = useContext(Context);
@@ -34,7 +34,7 @@ export const Top = () => {
         ので気をつけてね。
       </Text>
       <Flex justify="center" align="center">
-        <Text fontSize="sm">難易度：</Text>
+        <Text fontSize="sm">むずかしさ：</Text>
         <Select
           defaultValue={level}
           onChange={(e) => setLevel(e.target.value as Level)}

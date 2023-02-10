@@ -1,9 +1,5 @@
 import { createContext, ReactNode, useState } from "react";
 
-type View = "Top" | "Game" | "Result";
-
-export type Level = "あまい" | "ふつう" | "からい" | "ヤバッ！";
-
 type Context = {
   view: View;
   setView: React.Dispatch<React.SetStateAction<View>>;

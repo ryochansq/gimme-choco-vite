@@ -19,7 +19,9 @@ export const DROP_LANE = {
   center: 50,
   right: 50 + DROP_LANE_INTERVAL,
 };
-export const GRAVITY_CONSTANT = 0.06 / 900; // 単位：pt/ms^2
+export const GRAVITY_CONSTANT_LOW = 0.04 / 900; // 単位：pt/ms^2
+export const GRAVITY_CONSTANT_MID = 0.06 / 900; // 単位：pt/ms^2
+export const GRAVITY_CONSTANT_HIGH = 0.07 / 900; // 単位：pt/ms^2
 
 export const CATCHABLE_RANGE = {
   start: 99,
@@ -60,7 +62,20 @@ const getNewMoa = (
   return newMoa;
 };
 
-const getNewDrops = (phase: Phase, drops: Drop[], ms: number) =>
+const getNewY = (newMs: number, level: Level) => {
+  switch (level) {
+    case "あまい":
+      return -10 + GRAVITY_CONSTANT_LOW * Math.pow(newMs, 1.85);
+    case "ふつう":
+      return -10 + GRAVITY_CONSTANT_LOW * Math.pow(newMs, 1.9);
+    case "からい":
+      return -10 + GRAVITY_CONSTANT_LOW * Math.pow(newMs, 1.98);
+    case "ヤバッ！":
+      return -10 + GRAVITY_CONSTANT_HIGH * Math.pow(newMs, 2.02);
+  }
+};
+
+const getNewDrops = (phase: Phase, drops: Drop[], ms: number, level: Level) =>
   phase === "GAME"
     ? drops
         .filter((drop) => drop.y < 150)
@@ -69,7 +84,7 @@ const getNewDrops = (phase: Phase, drops: Drop[], ms: number) =>
           if (newMs < 0) return { ...drop, ms: newMs };
 
           const x = DROP_LANE[drop.lane];
-          const y = GRAVITY_CONSTANT * newMs * newMs;
+          const y = getNewY(newMs, level);
           return { ...drop, ms: newMs, x, y };
         })
     : drops;
@@ -110,7 +125,7 @@ export const getUpdatedParams = (
   input: Input,
   params: GameParameters
 ): GameParameters => {
-  const drops = getNewDrops(params.phase, params.drops, ms);
+  const drops = getNewDrops(params.phase, params.drops, ms, params.level);
   const catchingDrop = getCatchingDrop(input, params);
   const newDrops = catchingDrop
     ? drops.filter((drop) => drop.id !== catchingDrop.id)
@@ -120,5 +135,5 @@ export const getUpdatedParams = (
   const newPhase = getNewPhase(params.phase, newDrops, params.ms);
   const newMs = params.phase === newPhase ? params.ms + ms : 0;
 
-  return { phase: newPhase, ms: newMs, moa, score, drops: newDrops };
+  return { ...params, phase: newPhase, ms: newMs, moa, score, drops: newDrops };
 };

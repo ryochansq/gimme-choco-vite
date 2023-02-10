@@ -1,5 +1,9 @@
 /// <reference types="vite/client" />
 
+type View = "Top" | "Game" | "Result";
+
+type Level = "あまい" | "ふつう" | "からい" | "ヤバッ！";
+
 type Input = "left" | "right" | "center";
 
 type Size = {
@@ -39,4 +43,5 @@ type GameParameters = {
   moa: Moa;
   drops: Drop[];
   score: number;
+  level: Level;
 };
