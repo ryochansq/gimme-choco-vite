@@ -1,30 +1,26 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { draw } from "../../../functions/draw";
 import { makeDrops } from "../../../functions/makeDrops";
 import { getUpdatedParams } from "../../../functions/params";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { useCanvas } from "../../../hooks/useCanvas";
-import { Context } from "../../../store";
 
-export const useGame = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
-  const { setScore, setView, level } = useContext(Context);
+export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
   const { ctx, canvasSize, input } = useCanvas(canvasRef);
   const [params, setParams] = useState<GameParameters>({
-    phase: "GIVEME",
+    phase: "END",
     ms: 0,
-    moa: { x: 50, y: 91 },
-    drops: makeDrops(level),
+    moa: { x: 50, y: 27 },
+    drops: makeDrops("あまい"),
     score: 0,
-    level,
+    level: "あまい",
   });
 
   const callback = (ms: number) => {
     if (!ctx) return;
-    const updatedParams = getUpdatedParams(ms, input, params);
-    draw(ctx, canvasSize, input, updatedParams);
+    const updatedParams = getUpdatedParams(ms, input, params, true);
+    draw(ctx, canvasSize, input, updatedParams, true);
     setParams(updatedParams);
-    setScore(updatedParams.score);
-    if (params.phase === "END") setView("Result");
   };
   useAnimationFrame(callback);
 };

@@ -1,22 +1,27 @@
 import { Flex, Select, Text } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useRef } from "react";
 import { BaseButton } from "../../components/parts/BaseButton";
 import { Context } from "../../store";
+import { useDemo } from "./hooks/useDemo";
 
 export const Top = () => {
   const { setView, level, setLevel } = useContext(Context);
   const onClickStart = () => {
     setView("Game");
   };
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  useDemo(canvasRef);
 
   return (
     <Flex direction="column" gap={1} p="4">
       <Text fontSize="sm">
         もあちゃんを左右に動かして、上から降ってくるチョコのお菓子をできるだけたくさん受け止めよう！
       </Text>
-      {/* <Grid container justify="center">
-      <canvas ref={canvasRef} />
-    </Grid> */}
+      <Flex justify="center">
+        <div style={{ width: "75%", aspectRatio: "10/5.5" }}>
+          <canvas ref={canvasRef} style={{ width: "100%", height: "100%" }} />
+        </div>
+      </Flex>
       <Text fontSize="sm">パソコン：「←」「→」キーで左右に動く</Text>
       <Text fontSize="sm">
         スマホ：画面の左側のどこかをタッチしていると左に、右側だと右に動く

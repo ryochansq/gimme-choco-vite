@@ -10,6 +10,11 @@ const MOA_LANE = {
   center: 50,
   right: 50 + MOA_LANE_INTERVAL,
 };
+const DEMO_MOA_LANE = {
+  left: 50 - 13,
+  center: 50,
+  right: 50 + 13,
+};
 const CATCHING_TIME = 200; //単位：ms
 const DAMAGED_TIME = 600; // 単位：ms
 
@@ -32,11 +37,13 @@ const getNewMoa = (
   input: Input,
   moa: Moa,
   ms: number,
-  catchingDropType?: DropType
+  catchingDropType?: DropType,
+  isDemo = false
 ): Moa => {
+  const LANE = isDemo ? DEMO_MOA_LANE : MOA_LANE;
   const newMoa = { ...moa };
   if (catchingDropType === "hone")
-    return { ...moa, x: MOA_LANE.center, condition: { type: "DAMAGED", ms } };
+    return { ...moa, x: LANE.center, condition: { type: "DAMAGED", ms } };
   if (newMoa.condition) {
     newMoa.condition.ms += ms;
     if (newMoa.condition.type === "DAMAGED") {
@@ -48,7 +55,7 @@ const getNewMoa = (
     }
   }
   if (catchingDropType) newMoa.condition = { type: "CATCHING", ms };
-  const destination = MOA_LANE[input];
+  const destination = LANE[input];
   const d = MOA_SPEED * ms;
   if (destination > newMoa.x) {
     newMoa.x += d;
@@ -57,8 +64,8 @@ const getNewMoa = (
     newMoa.x -= d;
     if (destination > newMoa.x) newMoa.x = destination;
   }
-  if (newMoa.x < MOA_LANE.left) newMoa.x = MOA_LANE.left;
-  if (newMoa.x > MOA_LANE.right) newMoa.x = MOA_LANE.right;
+  if (newMoa.x < LANE.left) newMoa.x = LANE.left;
+  if (newMoa.x > LANE.right) newMoa.x = LANE.right;
   return newMoa;
 };
 
@@ -123,14 +130,15 @@ const getNewPhase = (phase: Phase, drops: Drop[], ms: number): Phase => {
 export const getUpdatedParams = (
   ms: number,
   input: Input,
-  params: GameParameters
+  params: GameParameters,
+  isDemo = false
 ): GameParameters => {
   const drops = getNewDrops(params.phase, params.drops, ms, params.level);
   const catchingDrop = getCatchingDrop(input, params);
   const newDrops = catchingDrop
     ? drops.filter((drop) => drop.id !== catchingDrop.id)
     : drops;
-  const moa = getNewMoa(input, params.moa, ms, catchingDrop?.type);
+  const moa = getNewMoa(input, params.moa, ms, catchingDrop?.type, isDemo);
   const score = getNewScore(params.score, catchingDrop?.type);
   const newPhase = getNewPhase(params.phase, newDrops, params.ms);
   const newMs = params.phase === newPhase ? params.ms + ms : 0;

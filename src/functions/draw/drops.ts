@@ -36,3 +36,37 @@ export const drawDrops = (
     drawImage(ctx, image, x, y, w, h, canvasSize);
   });
 };
+
+export const drawDemoDrops = (
+  ctx: CanvasRenderingContext2D,
+  canvasSize: Size
+) => {
+  const DEMO_DROP_SIZE = DROP_SIZE * 1.1;
+  const image0 = getDropImage("choco0");
+  const x0 = 10 - DEMO_DROP_SIZE / 2;
+  const y0 = 20 - DEMO_DROP_SIZE;
+  const image1 = getDropImage("choco1");
+  const x1 = 90 - DEMO_DROP_SIZE / 2;
+  const y1 = 20 - DEMO_DROP_SIZE;
+  const image2 = getDropImage("choco2");
+  const x2 = 90 - DEMO_DROP_SIZE / 2;
+  const y2 = 45 - DEMO_DROP_SIZE;
+  const image3 = getDropImage("hone");
+  const x3 = 10 - DEMO_DROP_SIZE / 2;
+  const y3 = 45 - DEMO_DROP_SIZE;
+  const w = DEMO_DROP_SIZE;
+  const h = DEMO_DROP_SIZE * DROP_HEIGHT_RATIO;
+  drawImage(ctx, image0, x0, y0, w, h, canvasSize);
+  drawImage(ctx, image1, x1, y1, w, h, canvasSize);
+  drawImage(ctx, image2, x2, y2, w, h, canvasSize);
+  drawImage(ctx, image3, x3, y3, w, h, canvasSize);
+
+  const text = "DANGER!!";
+  const xt = 0;
+  const yt = 90;
+  const dx = Math.round((canvasSize.width / 100) * xt);
+  const dy = Math.round((canvasSize.height / 100) * yt);
+  ctx.fillStyle = "red";
+  ctx.font = "26px sans-serif";
+  ctx.fillText(text, dx, dy);
+};
