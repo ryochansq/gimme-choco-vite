@@ -7,6 +7,7 @@ import { useCanvas } from "../../../hooks/useCanvas";
 import { useLoadImage } from "./useLoadImage";
 
 export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
+  useLoadImage();
   const { ctx, canvasSize, input } = useCanvas(canvasRef, true);
   const [params, setParams] = useState<GameParameters>({
     phase: "END",
@@ -16,7 +17,6 @@ export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
     score: 0,
     level: "あまい",
   });
-  useLoadImage();
 
   const callback = (ms: number) => {
     if (!ctx) return;
