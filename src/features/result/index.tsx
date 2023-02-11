@@ -6,8 +6,7 @@ import { levelToText } from "../../functions/level";
 import { Context } from "../../store";
 
 export const Result = () => {
-  const { score, setView, level, setLevel, limit, setLimit } =
-    useContext(Context);
+  const { score, setView, level, limit, setLimit } = useContext(Context);
   const toast = useToast();
   const onToast = (newLimit: Level) => {
     if (!toast.isActive("toast"))
@@ -24,7 +23,6 @@ export const Result = () => {
   const releaseLevel = (newLevel: Level) => {
     localStorage.setItem("limit", newLevel);
     setLimit(newLevel);
-    setLevel(newLevel);
     onToast(newLevel);
   };
 
