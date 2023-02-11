@@ -9,6 +9,8 @@ type Context = {
   setLevel: React.Dispatch<React.SetStateAction<Level>>;
   limit: Level;
   setLimit: React.Dispatch<React.SetStateAction<Level>>;
+  total: number;
+  setTotal: React.Dispatch<React.SetStateAction<number>>;
 };
 
 export const Context = createContext({} as Context);
@@ -18,6 +20,7 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
   const [score, setScore] = useState(0);
   const [level, setLevel] = useState<Level>("ふつう");
   const [limit, setLimit] = useState<Level>("ふつう");
+  const [total, setTotal] = useState(0);
 
   return (
     <Context.Provider
@@ -30,6 +33,8 @@ export const ContextProvider = ({ children }: { children: ReactNode }) => {
         setLevel,
         limit,
         setLimit,
+        total,
+        setTotal,
       }}
     >
       {children}

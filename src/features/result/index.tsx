@@ -1,12 +1,13 @@
 import { Flex, Image, Text, useToast } from "@chakra-ui/react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { FaTwitter } from "react-icons/fa";
 import { BaseButton } from "../../components/parts/BaseButton";
 import { levelToText } from "../../functions/level";
 import { Context } from "../../store";
 
 export const Result = () => {
-  const { score, setView, level, limit, setLimit } = useContext(Context);
+  const { score, setView, level, limit, setLimit, total, setTotal } =
+    useContext(Context);
   const toast = useToast();
   const onToast = (newLimit: Level) => {
     if (!toast.isActive("toast"))
@@ -31,6 +32,12 @@ export const Result = () => {
       releaseLevel("からい");
     if (level === "からい" && limit === "からい" && score >= 80)
       releaseLevel("ヤバッ！");
+  }, []);
+
+  useEffect(() => {
+    const newTotal = total + score;
+    setTotal(newTotal);
+    localStorage.setItem("total", String(newTotal));
   }, []);
 
   const evaluation = (() => {

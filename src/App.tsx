@@ -14,11 +14,13 @@ import { Top } from "./features/top";
 import { Context } from "./store";
 
 export default function App() {
-  const { view, setLimit } = useContext(Context);
+  const { view, setLimit, setTotal } = useContext(Context);
 
   useEffect(() => {
     const limit = localStorage.getItem("limit");
     if (limit) setLimit(limit as Level);
+    const total = localStorage.getItem("total");
+    if (total) setTotal(Number(total));
   }, []);
 
   return (
