@@ -2,14 +2,21 @@ import { drawImage } from "./utils";
 
 const DROP_SIZE = 15;
 const choco0Image = new Image();
+choco0Image.onload = () => (hasLoaded[0] = true);
 choco0Image.src = "/drops/choco0.png";
 const choco1Image = new Image();
+choco1Image.onload = () => (hasLoaded[1] = true);
 choco1Image.src = "/drops/choco1.png";
 const choco2Image = new Image();
+choco2Image.onload = () => (hasLoaded[2] = true);
 choco2Image.src = "/drops/choco2.png";
 const honeImage = new Image();
+honeImage.onload = () => (hasLoaded[3] = true);
 honeImage.src = "/drops/hone.png";
 const DROP_HEIGHT_RATIO = choco0Image.height / choco0Image.width;
+
+const hasLoaded = new Array<boolean>(4).fill(false);
+export const hasDropsLoaded = () => hasLoaded.every((val) => val);
 
 const getDropImage = (type: DropType) => {
   const image = {

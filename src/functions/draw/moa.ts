@@ -2,13 +2,21 @@ import { drawImage } from "./utils";
 
 const MOA_SIZE = 35;
 const moaImage = new Image();
+moaImage.onload = () => (hasLoaded[0] = true);
 moaImage.src = "/moa/moa.png";
 const moaLeftImage = new Image();
+moaLeftImage.onload = () => (hasLoaded[1] = true);
 moaLeftImage.src = "/moa/moaLeft.png";
 const moaRightImage = new Image();
+moaRightImage.onload = () => (hasLoaded[2] = true);
 moaRightImage.src = "/moa/moaRight.png";
 const moaDamagedImage = new Image();
+moaDamagedImage.onload = () => (hasLoaded[3] = true);
 moaDamagedImage.src = "/moa/moaDamaged.png";
+
+const hasLoaded = new Array<boolean>(4).fill(false);
+export const hasMoaLoaded = () => hasLoaded.every((val) => val);
+
 const MOA_HEIGHT_RATIO = moaImage.height / moaImage.width;
 const AMPLITUDE = {
   DAMAGED: 0.03,

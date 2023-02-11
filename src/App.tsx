@@ -1,5 +1,11 @@
-import { Box, Collapse, Flex } from "@chakra-ui/react";
-import { useContext, useEffect } from "react";
+import {
+  Box,
+  Center,
+  CircularProgress,
+  Collapse,
+  Flex,
+} from "@chakra-ui/react";
+import { Suspense, useContext, useEffect } from "react";
 import { Footer } from "./components/modules/Footer";
 import { Game } from "./features/game";
 import { Header } from "./components/modules/Header";
@@ -25,19 +31,27 @@ export default function App() {
       style={{ touchAction: "none" }}
     >
       <Header />
-      <Box maxW="md" width="100%">
-        <Collapse in={view === "Top"} animateOpacity unmountOnExit>
-          <Top />
-          <Footer />
-        </Collapse>
-        <Collapse in={view === "Game"} animateOpacity unmountOnExit>
-          <Game />
-        </Collapse>
-        <Collapse in={view === "Result"} animateOpacity unmountOnExit>
-          <Result />
-          <Footer />
-        </Collapse>
-      </Box>
+      <Suspense
+        fallback={
+          <Center h="300px">
+            <CircularProgress isIndeterminate color="choco.500" />
+          </Center>
+        }
+      >
+        <Box maxW="md" width="100%">
+          <Collapse in={view === "Top"} animateOpacity unmountOnExit>
+            <Top />
+            <Footer />
+          </Collapse>
+          <Collapse in={view === "Game"} animateOpacity unmountOnExit>
+            <Game />
+          </Collapse>
+          <Collapse in={view === "Result"} animateOpacity unmountOnExit>
+            <Result />
+            <Footer />
+          </Collapse>
+        </Box>
+      </Suspense>
     </Flex>
   );
 }
