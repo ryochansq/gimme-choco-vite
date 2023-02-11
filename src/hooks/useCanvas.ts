@@ -1,11 +1,14 @@
 import { useLayoutEffect, useState } from "react";
 import { useLeftRightInput } from "./useLeftRightInput";
 
-export const useCanvas = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
+export const useCanvas = (
+  canvasRef: React.RefObject<HTMLCanvasElement>,
+  isDemo = false
+) => {
   const [ctx, setCtx] = useState<CanvasRenderingContext2D>();
   const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
 
-  const { input } = useLeftRightInput();
+  const { input } = useLeftRightInput(isDemo);
 
   // init
   useLayoutEffect(() => {

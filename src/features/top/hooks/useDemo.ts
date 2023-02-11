@@ -6,7 +6,7 @@ import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { useCanvas } from "../../../hooks/useCanvas";
 
 export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
-  const { ctx, canvasSize, input } = useCanvas(canvasRef);
+  const { ctx, canvasSize, input } = useCanvas(canvasRef, true);
   const [params, setParams] = useState<GameParameters>({
     phase: "END",
     ms: 0,

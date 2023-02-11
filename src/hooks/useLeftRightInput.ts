@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const isLeft = (x: number) => x <= document.body.clientWidth / 2;
 
-export const useLeftRightInput = (): { input: Input } => {
+export const useLeftRightInput = (isDemo = false): { input: Input } => {
   const [left, setLeft] = useState(false);
   const [right, setRight] = useState(false);
 
@@ -32,7 +32,7 @@ export const useLeftRightInput = (): { input: Input } => {
     } else if (event.key === "Right" || event.key === "ArrowRight") {
       setRight(isDown);
     }
-    event.preventDefault();
+    if (!isDemo) event.preventDefault();
   };
 
   const handleTouchEvents = (event: TouchEvent) => {
@@ -46,7 +46,7 @@ export const useLeftRightInput = (): { input: Input } => {
     }
     setLeft(isLeftTouched);
     setRight(isRightTouched);
-    event.preventDefault();
+    if (!isDemo) event.preventDefault();
   };
 
   return { input };
