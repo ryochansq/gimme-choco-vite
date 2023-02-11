@@ -8,6 +8,7 @@ import { Context } from "../../store";
 export const Result = () => {
   const { score, setView, level } = useContext(Context);
   const evaluation = (() => {
+    if (score === 100 && level === "ヤバッ！") return "200";
     if (score === 100) return "100";
     if (score >= 80) return "80";
     if (score >= 50) return "50";
