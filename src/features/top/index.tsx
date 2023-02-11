@@ -4,7 +4,6 @@ import { BaseButton } from "../../components/parts/BaseButton";
 import { levelToText } from "../../functions/level";
 import { Context } from "../../store";
 import { useDemo } from "./hooks/useDemo";
-import { useLoadImage } from "./hooks/useLoadImage";
 
 export const Top = () => {
   const { setView, level, setLevel, limit } = useContext(Context);
@@ -12,7 +11,6 @@ export const Top = () => {
     setView("Game");
   };
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  useLoadImage();
   useDemo(canvasRef);
 
   return (

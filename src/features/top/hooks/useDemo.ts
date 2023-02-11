@@ -4,6 +4,7 @@ import { makeDrops } from "../../../functions/makeDrops";
 import { getUpdatedParams } from "../../../functions/params";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { useCanvas } from "../../../hooks/useCanvas";
+import { useLoadImage } from "./useLoadImage";
 
 export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
   const { ctx, canvasSize, input } = useCanvas(canvasRef, true);
@@ -15,6 +16,7 @@ export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
     score: 0,
     level: "あまい",
   });
+  useLoadImage();
 
   const callback = (ms: number) => {
     if (!ctx) return;
