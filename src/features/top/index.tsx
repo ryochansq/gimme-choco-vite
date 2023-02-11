@@ -6,7 +6,7 @@ import { Context } from "../../store";
 import { useDemo } from "./hooks/useDemo";
 
 export const Top = () => {
-  const { setView, level, setLevel } = useContext(Context);
+  const { setView, level, setLevel, limit } = useContext(Context);
   const onClickStart = () => {
     setView("Game");
   };
@@ -25,7 +25,7 @@ export const Top = () => {
       </Flex>
       <Text fontSize="sm">パソコン：「←」「→」キーで左右に動く</Text>
       <Text fontSize="sm">
-        スマホ：画面の左側のどこかをタッチしていると左に、右側だと右に動く
+        スマホ：画面の左側をタッチすると左に、右側だと右に動く
       </Text>
       <Text fontSize="xs">
         （機種によってはタッチが速すぎると反応しないことがあります）
@@ -44,14 +44,17 @@ export const Top = () => {
         <Select
           defaultValue={level}
           onChange={(e) => setLevel(e.target.value as Level)}
-          size="sm"
           variant="filled"
-          w="160px"
+          w="200px"
         >
           <option value="あまい">{levelToText["あまい"]}</option>
           <option value="ふつう">{levelToText["ふつう"]}</option>
-          <option value="からい">{levelToText["からい"]}</option>
-          <option value="ヤバッ！">{levelToText["ヤバッ！"]}</option>
+          {(limit === "からい" || limit === "ヤバッ！") && (
+            <option value="からい">{levelToText["からい"]}</option>
+          )}
+          {limit === "ヤバッ！" && (
+            <option value="ヤバッ！">{levelToText["ヤバッ！"]}</option>
+          )}
         </Select>
       </Flex>
       <Flex justify="center" mt="2">

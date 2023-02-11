@@ -1,14 +1,43 @@
-import { Button, Flex, Image, Text } from "@chakra-ui/react";
-import { useContext } from "react";
+import { Flex, Image, Text, useToast } from "@chakra-ui/react";
+import { useContext, useEffect, useState } from "react";
 import { FaTwitter } from "react-icons/fa";
 import { BaseButton } from "../../components/parts/BaseButton";
 import { levelToText } from "../../functions/level";
 import { Context } from "../../store";
 
 export const Result = () => {
-  const { score, setView, level } = useContext(Context);
+  const { score, setView, level, setLevel, limit, setLimit } =
+    useContext(Context);
+  const toast = useToast();
+  const onToast = (newLimit: Level) => {
+    if (!toast.isActive("toast"))
+      toast({
+        id: "toast",
+        title: `むずかしさ「${newLimit}」が解放されたよ！`,
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+        position: "top",
+      });
+  };
+
+  const releaseLevel = (newLevel: Level) => {
+    localStorage.setItem("limit", newLevel);
+    setLimit(newLevel);
+    setLevel(newLevel);
+    onToast(newLevel);
+  };
+
+  useEffect(() => {
+    if (level === "ふつう" && limit === "ふつう" && score >= 80)
+      releaseLevel("からい");
+    if (level === "からい" && limit === "からい" && score >= 80)
+      releaseLevel("ヤバッ！");
+  }, []);
+
   const evaluation = (() => {
-    if (score === 100 && level === "ヤバッ！") return "200";
+    if (score === 100 && (level === "ヤバッ！" || level === "からい"))
+      return "200";
     if (score === 100) return "100";
     if (score >= 80) return "80";
     if (score >= 50) return "50";

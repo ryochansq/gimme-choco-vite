@@ -1,5 +1,5 @@
 import { Box, Collapse, Flex } from "@chakra-ui/react";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { Footer } from "./components/modules/Footer";
 import { Game } from "./features/game";
 import { Header } from "./components/modules/Header";
@@ -8,7 +8,12 @@ import { Top } from "./features/top";
 import { Context } from "./store";
 
 export default function App() {
-  const { view } = useContext(Context);
+  const { view, setLimit } = useContext(Context);
+
+  useEffect(() => {
+    const limit = localStorage.getItem("limit");
+    if (limit) setLimit(limit as Level);
+  }, []);
 
   return (
     <Flex
