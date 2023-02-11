@@ -22,6 +22,5 @@ export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
     draw(ctx, canvasSize, input, updatedParams, true);
     setParams(updatedParams);
   };
-
   useAnimationFrame(callback);
 };
