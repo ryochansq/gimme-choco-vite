@@ -1,6 +1,7 @@
 import { Flex, Select, Text } from "@chakra-ui/react";
 import { useContext, useRef } from "react";
 import { BaseButton } from "../../components/parts/BaseButton";
+import { levelToText } from "../../functions/level";
 import { Context } from "../../store";
 import { useDemo } from "./hooks/useDemo";
 
@@ -47,10 +48,10 @@ export const Top = () => {
           variant="filled"
           w="160px"
         >
-          <option value="あまい">あまい</option>
-          <option value="ふつう">ふつう🔥</option>
-          <option value="からい">からい🔥🔥</option>
-          <option value="ヤバッ！">ヤバッ！🔥🔥🔥</option>
+          <option value="あまい">{levelToText["あまい"]}</option>
+          <option value="ふつう">{levelToText["ふつう"]}</option>
+          <option value="からい">{levelToText["からい"]}</option>
+          <option value="ヤバッ！">{levelToText["ヤバッ！"]}</option>
         </Select>
       </Flex>
       <Flex justify="center" mt="2">

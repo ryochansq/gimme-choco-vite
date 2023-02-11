@@ -76,9 +76,9 @@ const getNewY = (newMs: number, level: Level) => {
     case "ふつう":
       return -10 + GRAVITY_CONSTANT_LOW * Math.pow(newMs, 1.9);
     case "からい":
-      return -10 + GRAVITY_CONSTANT_LOW * Math.pow(newMs, 1.98);
+      return -10 + GRAVITY_CONSTANT_MID * Math.pow(newMs, 1.98);
     case "ヤバッ！":
-      return -10 + GRAVITY_CONSTANT_HIGH * Math.pow(newMs, 2.02);
+      return -20 + GRAVITY_CONSTANT_HIGH * Math.pow(newMs, 2.02);
   }
 };
 

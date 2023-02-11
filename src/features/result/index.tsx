@@ -2,6 +2,7 @@ import { Button, Flex, Image, Text } from "@chakra-ui/react";
 import { useContext } from "react";
 import { FaTwitter } from "react-icons/fa";
 import { BaseButton } from "../../components/parts/BaseButton";
+import { levelToText } from "../../functions/level";
 import { Context } from "../../store";
 
 export const Result = () => {
@@ -19,7 +20,7 @@ export const Result = () => {
   };
 
   const onClickTweet = () => {
-    const text = `もあちゃんのギミチョコだいさくせん で\n 満腹度：${score}（${level}） でした！\n\ngimme-choco.ryochansq.vercel.app\n\n#もあちゃんのギミチョコだいさくせん\n#BABYMETAL #さくら学院父兄パソコン部`;
+    const text = `もあちゃんのギミチョコだいさくせん で\n 難易度：${levelToText[level]}\n 満腹度：${score} でした！\n\ngimme-choco.ryochansq.vercel.app\n\n#もあちゃんのギミチョコだいさくせん\n#BABYMETAL #さくら学院父兄パソコン部`;
     const encodedText = encodeURIComponent(text);
     const intent = `https://twitter.com/intent/tweet?text=${encodedText}`;
     window.open(intent);
