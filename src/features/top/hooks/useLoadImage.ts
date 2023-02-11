@@ -4,5 +4,5 @@ import { hasTextLoaded } from "../../../functions/draw/texts";
 
 export const useLoadImage = () => {
   if (hasDropsLoaded() && hasMoaLoaded() && hasTextLoaded()) return;
-  throw new Promise<void>((resolve) => setTimeout(resolve, 0));
+  throw new Promise<void>((resolve) => setTimeout(resolve, 500));
 };
