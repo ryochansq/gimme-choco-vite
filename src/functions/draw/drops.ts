@@ -13,10 +13,11 @@ choco2Image.src = "/drops/choco2.png";
 const honeImage = new Image();
 honeImage.onload = () => (hasLoaded[3] = true);
 honeImage.src = "/drops/hone.png";
-const DROP_HEIGHT_RATIO = choco0Image.height / choco0Image.width;
 
 const hasLoaded = new Array<boolean>(4).fill(false);
 export const hasDropsLoaded = () => hasLoaded.every((val) => val);
+
+const DROP_HEIGHT_RATIO = choco0Image.height / choco0Image.width;
 
 const getDropImage = (type: DropType) => {
   const image = {
