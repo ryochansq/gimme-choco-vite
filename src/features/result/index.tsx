@@ -41,8 +41,7 @@ export const Result = () => {
   }, []);
 
   const evaluation = (() => {
-    if (score === 100 && (level === "ヤバッ！" || level === "からい"))
-      return "200";
+    if (score === 100 && level === "ヤバッ！") return "200";
     if (score === 100) return "100";
     if (score >= 80) return "80";
     if (score >= 50) return "50";
@@ -64,7 +63,15 @@ export const Result = () => {
   return (
     <>
       <Image src={src} />
-      <Flex align="end" justify="center" color="choco.500" p="16px">
+      <Flex align="end" justify="center" color="choco.500" mt="16px">
+        <Text fontSize="lg" as="b" lineHeight="30px">
+          むずかしさ：
+        </Text>
+        <Text fontSize="lg" as="b" lineHeight="30px">
+          {levelToText[level]}
+        </Text>
+      </Flex>
+      <Flex align="end" justify="center" color="choco.500" mb="16px">
         <Text fontSize="xl" as="b" lineHeight="30px">
           満腹度：
         </Text>
