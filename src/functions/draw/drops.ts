@@ -2,10 +2,7 @@ import { drawImage } from "./utils";
 
 const DROP_SIZE = 15;
 const choco0Image = new Image();
-choco0Image.onload = () => {
-  hasLoaded[0] = true;
-  console.info("onload");
-};
+choco0Image.onload = () => (hasLoaded[0] = true);
 choco0Image.src = "/drops/choco0.png";
 const choco1Image = new Image();
 choco1Image.onload = () => (hasLoaded[1] = true);
