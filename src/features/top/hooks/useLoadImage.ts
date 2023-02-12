@@ -6,7 +6,8 @@ export const useLoadImage = () => {
   if (hasDropsLoaded() && hasMoaLoaded() && hasTextLoaded()) return;
   throw new Promise<void>((resolve) =>
     setTimeout(() => {
-      location.reload();
+      if (!hasDropsLoaded() || !hasMoaLoaded() || !hasTextLoaded())
+        location.reload();
       resolve();
     }, 2000)
   );
