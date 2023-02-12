@@ -49,6 +49,7 @@ export const drawDemoDrops = (
   ctx: CanvasRenderingContext2D,
   canvasSize: Size
 ) => {
+  if (!hasDropsLoaded()) return;
   const DEMO_DROP_SIZE = DROP_SIZE * 1.1;
   const image0 = getDropImage("choco0");
   const x0 = 10 - DEMO_DROP_SIZE / 2;

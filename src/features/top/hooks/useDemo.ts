@@ -1,8 +1,5 @@
 import { useState } from "react";
 import { draw } from "../../../functions/draw";
-import { hasDropsLoaded } from "../../../functions/draw/drops";
-import { hasMoaLoaded } from "../../../functions/draw/moa";
-import { hasTextLoaded } from "../../../functions/draw/texts";
 import { makeDrops } from "../../../functions/makeDrops";
 import { getUpdatedParams } from "../../../functions/params";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
@@ -23,7 +20,6 @@ export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
 
   const callback = (ms: number) => {
     if (!ctx) return;
-    if (!hasDropsLoaded() || !hasMoaLoaded() || !hasTextLoaded()) return;
     const updatedParams = getUpdatedParams(ms, input, params, true);
     draw(ctx, canvasSize, input, updatedParams, true);
     setParams(updatedParams);
