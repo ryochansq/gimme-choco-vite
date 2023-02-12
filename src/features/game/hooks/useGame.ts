@@ -4,9 +4,11 @@ import { makeDrops } from "../../../functions/makeDrops";
 import { getUpdatedParams } from "../../../functions/params";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { useCanvas } from "../../../hooks/useCanvas";
+import { useImage } from "../../../hooks/useImage";
 import { Context } from "../../../store";
 
 export const useGame = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
+  const images = useImage();
   const { setScore, setView, level } = useContext(Context);
   const { ctx, canvasSize, input } = useCanvas(canvasRef);
   const [params, setParams] = useState<GameParameters>({
@@ -21,7 +23,7 @@ export const useGame = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
   const callback = (ms: number) => {
     if (!ctx) return;
     const updatedParams = getUpdatedParams(ms, input, params);
-    draw(ctx, canvasSize, input, updatedParams);
+    draw(ctx, canvasSize, images, input, updatedParams);
     setParams(updatedParams);
     setScore(updatedParams.score);
     if (params.phase === "END") setView("Result");

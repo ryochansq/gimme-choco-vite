@@ -4,10 +4,10 @@ import { makeDrops } from "../../../functions/makeDrops";
 import { getUpdatedParams } from "../../../functions/params";
 import { useAnimationFrame } from "../../../hooks/useAnimationFrame";
 import { useCanvas } from "../../../hooks/useCanvas";
-import { useLoadImage } from "./useLoadImage";
+import { useImage } from "../../../hooks/useImage";
 
 export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
-  useLoadImage();
+  const images = useImage();
   const { ctx, canvasSize, input } = useCanvas(canvasRef, true);
   const [params, setParams] = useState<GameParameters>({
     phase: "END",
@@ -21,7 +21,7 @@ export const useDemo = (canvasRef: React.RefObject<HTMLCanvasElement>) => {
   const callback = (ms: number) => {
     if (!ctx) return;
     const updatedParams = getUpdatedParams(ms, input, params, true);
-    draw(ctx, canvasSize, input, updatedParams, true);
+    draw(ctx, canvasSize, images, input, updatedParams, true);
     setParams(updatedParams);
   };
 

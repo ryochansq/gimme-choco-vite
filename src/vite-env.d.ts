@@ -45,3 +45,17 @@ type GameParameters = {
   score: number;
   level: Level;
 };
+
+type Images = {
+  choco0: HTMLImageElement;
+  choco1: HTMLImageElement;
+  choco2: HTMLImageElement;
+  hone: HTMLImageElement;
+  moa: HTMLImageElement;
+  moaLeft: HTMLImageElement;
+  moaRight: HTMLImageElement;
+  moaDamaged: HTMLImageElement;
+  giveMe: HTMLImageElement;
+  chocolate: HTMLImageElement;
+  finish: HTMLImageElement;
+};

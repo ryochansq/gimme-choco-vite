@@ -9,14 +9,15 @@ const getCount = (drops: Drop[]) =>
 export const draw = (
   ctx: CanvasRenderingContext2D,
   canvasSize: Size,
+  images: Images,
   input: Input,
   params: GameParameters,
   isDemo?: boolean
 ) => {
   ctx.clearRect(0, 0, canvasSize.width, canvasSize.height);
-  drawTexts(ctx, canvasSize, params.phase, params.ms);
-  drawMoa(ctx, input, canvasSize, params.moa);
-  drawDrops(ctx, canvasSize, params.drops);
+  drawTexts(ctx, canvasSize, images, params.phase, params.ms);
+  drawMoa(ctx, input, canvasSize, images, params.moa);
+  drawDrops(ctx, canvasSize, images, params.drops);
   if (!isDemo) drawCount(ctx, canvasSize, getCount(params.drops));
-  if (isDemo) drawDemoDrops(ctx, canvasSize);
+  if (isDemo) drawDemoDrops(ctx, canvasSize, images);
 };
